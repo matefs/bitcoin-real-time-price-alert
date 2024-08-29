@@ -8,26 +8,7 @@ const BitcoinPrice = () => {
   const [priceHistory, setPriceHistory] = useState([]);
 
   useEffect(() => {
-    const socket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade');
 
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const btcPriceUSD = parseFloat(data.p);
-
-      setPriceHistory((prevPrices) => {
-        const newPrices = [...prevPrices, btcPriceUSD];
-        if (newPrices.length > 10) {
-          newPrices.shift();
-        }
-        return newPrices;
-      });
-
-      console.log('Bitcoin pricing in USD (WebSocket):', btcPriceUSD);
-    };
-
-    return () => {
-      socket.close();
-    };
   }, []);
 
   const chartData = {
@@ -45,7 +26,7 @@ const BitcoinPrice = () => {
 
   return (
     <div>
-      <h1>Bitcoin Price History (USD)</h1>
+      <h1>Real time Bitcoin Price History (USD)</h1>
       <Line data={chartData} /> {/* Render the chart */}
     </div>
   );
