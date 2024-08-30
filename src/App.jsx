@@ -8,7 +8,26 @@ const BitcoinPrice = () => {
   const [priceHistory, setPriceHistory] = useState([]);
 
   useEffect(() => {
+    const socket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade');
 
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const btcPriceUSD = parseFloat(data.p);
+
+      setPriceHistory((prevPrices) => {
+        const newPrices = [...prevPrices, btcPriceUSD];
+        if (newPrices.length > 10) {
+          newPrices.shift();
+        }
+        return newPrices;
+      });
+
+      console.log('Bitcoin pricing in USD (WebSocket):', btcPriceUSD);
+    };
+
+    return () => {
+      socket.close();
+    };
   }, []);
 
   const chartData = {
