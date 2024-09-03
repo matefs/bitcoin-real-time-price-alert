@@ -4,16 +4,24 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+const playDingAudio = () => {
+  // const audio = new Audio('../public/ding.mp3');
+  // audio.play().catch(error => {
+  //   console.error('Error playing audio:', error);
+  // });  
+}
+
 const BitcoinPrice = () => {
   const [priceHistory, setPriceHistory] = useState([]);
-
+ 
   useEffect(() => {
     const socket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade');
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       const btcPriceUSD = parseFloat(data.p);
-
+      btcPriceUSD <=  58000  ? playDingAudio() : null
+      
       setPriceHistory((prevPrices) => {
         const newPrices = [...prevPrices, btcPriceUSD];
         if (newPrices.length > 10) {
