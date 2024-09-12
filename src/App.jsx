@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import BitcoinChart from './BitcoinChart'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -45,16 +46,18 @@ const BitcoinPrice = () => {
         label: 'Bitcoin Price (USD)',
         data: priceHistory,
         fill: false,
-        borderColor: 'rgb(75, 192, 192)',
+        borderColor: 'rgba(255, 165, 0, 1)',
         tension: 0.1,
       },
     ],
   };
 
   return (
-    <div>
-      <h1>Real time Bitcoin Price History (USD)</h1>
+    <div>  
+      <h3 style={{ textAlign: 'center' }}>Real time Bitcoin Price History (USD)</h3>
       <Line data={chartData} /> {/* Render the chart */}
+      <h3 style={{ textAlign: 'center' }}>Closed day Price History (USD)</h3>
+      <BitcoinChart /> 
     </div>
   );
 };
