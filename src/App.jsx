@@ -55,7 +55,7 @@ const BitcoinPrice = () => {
   return (
     <div>  
       <h3>Real time Bitcoin Price History (USD)</h3>
-      <Line data={chartData} /> {/* Render the chart */}
+      <Line data={chartData} />  
       <h3  >Closed day Price History (USD)</h3>
       <BitcoinChart /> 
     </div>
