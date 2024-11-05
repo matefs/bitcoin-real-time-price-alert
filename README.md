@@ -9,9 +9,7 @@ This project visualizes Bitcoin's price history using React and Plotly, fetching
 
 -   **Historical Price Chart**: Displays Bitcoin's closing prices  
     
--   **Real-Time Price Chart**: Shows live Bitcoin price updates.
-    
--   **Transaction Statistics**: Provides key Bitcoin transaction metrics.
+-   **Real-Time Price Chart**: Shows live Bitcoin price updates. 
     
 
 ## Installation
