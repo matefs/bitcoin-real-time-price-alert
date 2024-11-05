@@ -1,63 +1,36 @@
+// filename: components/BitcoinPrice.js
+
 import React, { useState, useEffect } from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import BitcoinChart from './BitcoinChart'
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-
-const playDingAudio = () => {
-  // const audio = new Audio('../public/ding.mp3');
-  // audio.play().catch(error => {
-  //   console.error('Error playing audio:', error);
-  // });  
-}
+import RealTimeBitcoinChart from './RealTimeBitcoinChart';
+import BitcoinChart from './BitcoinChart';
 
 const BitcoinPrice = () => {
-  const [priceHistory, setPriceHistory] = useState([]);
- 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    const socket = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade');
+    // Simula um carregamento de 2 segundos antes de mostrar os gráficos
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
 
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      const btcPriceUSD = parseFloat(data.p);
-      btcPriceUSD <=  58000  ? playDingAudio() : null
-      
-      setPriceHistory((prevPrices) => {
-        const newPrices = [...prevPrices, btcPriceUSD];
-        if (newPrices.length > 10) {
-          newPrices.shift();
-        }
-        return newPrices;
-      });
-
-      console.log('Bitcoin pricing in USD (WebSocket):', btcPriceUSD);
-    };
-
-    return () => {
-      socket.close();
-    };
+    return () => clearTimeout(timer); // Limpa o timer ao desmontar o componente
   }, []);
 
-  const chartData = {
-    labels: priceHistory.map((_, index) => index + 1), // Labels for the x-axis
-    datasets: [
-      {
-        label: 'Bitcoin Price (USD)',
-        data: priceHistory,
-        fill: false,
-        borderColor: 'rgba(255, 165, 0, 1)',
-        tension: 0.1,
-      },
-    ],
-  };
+  if (isLoading) {
+    return (
+      <div style={{ textAlign: 'center', marginTop: '50px' }}>
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
 
   return (
-    <div>  
-      <h3>Real time Bitcoin Price History (USD)</h3>
-      <Line data={chartData} />  
-      <h3  >Closed day Price History (USD)</h3>
-      <BitcoinChart /> 
+    <div>
+
+      <h3>Closed Day Price History (USD)</h3>
+      <BitcoinChart />
+      <h3>Real-time Bitcoin Price History (USD)</h3>
+      <RealTimeBitcoinChart />
     </div>
   );
 };

@@ -1,12 +1,11 @@
+// filename: components/BitcoinChart.js
+
 import React, { useEffect, useState } from 'react';
-import Chart from 'chart.js/auto';
+import Plot from 'react-plotly.js';
 import moment from 'moment';
 
 function BitcoinChart() {
-  const [chartData, setChartData] = useState({
-    labels: [],
-    datasets: [],
-  });
+  const [chartData, setChartData] = useState({ dates: [], prices: [] });
 
   useEffect(() => {
     fetch('https://api.coindesk.com/v1/bpi/historical/close.json')
@@ -15,41 +14,29 @@ function BitcoinChart() {
         const dates = Object.keys(data.bpi).map(date => moment(date).format('MMM D, YYYY'));
         const prices = Object.values(data.bpi);
 
-        setChartData({
-          labels: dates,
-          datasets: [
-            {
-              label: 'Bitcoin Price',
-              data: prices,
-              borderColor: 'rgba(255, 165, 0, 1)',
-              borderWidth: 1,
-            },
-          ],
-        });
+        setChartData({ dates, prices });
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
-  useEffect(() => {
-    if (chartData.labels.length > 0) {
-      const ctx = document.getElementById('myChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: chartData,
-        options: {
-          scales: {
-            y: {
-              beginAtZero: false,
-            },
-          },
-        },
-      });
-    }
-  }, [chartData]);
-
   return (
     <div>
-      <canvas id="myChart" width="400" height="200"></canvas>
+      <Plot
+        data={[
+          {
+            x: chartData.dates,
+            y: chartData.prices,
+            type: 'scatter',
+            mode: 'lines',
+            line: { color: 'orange' },
+          },
+        ]}
+        layout={{
+          title: 'Bitcoin Price History',
+          xaxis: { title: 'Date' },
+          yaxis: { title: 'Price (USD)' },
+        }}
+      />
     </div>
   );
 }
