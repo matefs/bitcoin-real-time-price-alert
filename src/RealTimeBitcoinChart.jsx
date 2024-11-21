@@ -25,7 +25,7 @@ const RealTimeBitcoinChart = () => {
 
       setPriceHistory((prevPrices) => {
         const newPrices = [...prevPrices, btcPriceUSD];
-        if (newPrices.length > 5) {
+        if (newPrices.length > 10000) {
           newPrices.shift();
         }
         return newPrices;
