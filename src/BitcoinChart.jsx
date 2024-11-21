@@ -1,5 +1,3 @@
-// filename: components/BitcoinChart.js
-
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 import moment from 'moment';
@@ -8,15 +6,23 @@ function BitcoinChart() {
   const [chartData, setChartData] = useState({ dates: [], prices: [] });
 
   useEffect(() => {
-    fetch('https://api.coindesk.com/v1/bpi/historical/close.json')
-      .then(response => response.json())
-      .then(data => {
-        const dates = Object.keys(data.bpi).map(date => moment(date).format('MMM D, YYYY'));
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          'https://api.coindesk.com/v1/bpi/historical/close.json?start=2010-07-17&end=2024-11-04'
+        );
+        const data = await response.json();
+        const dates = Object.keys(data.bpi).map(date =>
+          moment(date).format('MMM D, YYYY')
+        );
         const prices = Object.values(data.bpi);
-
         setChartData({ dates, prices });
-      })
-      .catch(error => console.error('Error fetching data:', error));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
