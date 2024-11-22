@@ -26,11 +26,11 @@ const BitcoinPrice = () => {
 
   return (
     <div>
-
-      <h3>Closed Day Price History (USD)</h3>
-      <BitcoinChart />
       <h3>Real-time Bitcoin Price History (USD)</h3>
       <RealTimeBitcoinChart />
+      <h3>Closed Day Price History (USD)</h3>
+      <BitcoinChart />
+
     </div>
   );
 };
